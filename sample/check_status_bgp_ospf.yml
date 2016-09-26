@@ -1,0 +1,39 @@
+# uplinkステータス確認
+uplink_status:
+  - command: show interfaces terse ae0
+  - item:
+    xpath: //physical-interface[normalize-space(name) = "ae0"]
+    tests:
+      - is-equal: oper-status, up
+
+# uplink OSPFステータス確認
+uplink_ospf: 
+  - command: show ospf neighbor
+  - item:
+    xpath: //ospf-neighbor[normalize-space(neighbor-address) = "1.0.1.2" ]
+    tests:
+      - is-equal: ospf-neighbor-state, Full
+
+# uplink OSPF metric確認
+uplink_ospf_metric:
+  - command: show ospf interface detail
+  - iterate:
+    xpath: //ospf-interface[normalize-space(interface-name) = "ae0.1" ]
+    tests:
+      - is-equal: ospf-interface-topology/ospf-topology-metric, 100
+
+# RR BGP Peer status確認
+bgp_rr_peer:
+  - command: show bgp summary
+  - item:
+    xpath: //bgp-peer[normalize-space(peer-address) = "1.0.1.2" ]
+    tests:
+    - is-equal: peer-state, Established
+
+# RR BGP Peer Route 確認
+bgp_rr_route:
+- command: show bgp neighbor 1.0.1.2
+- item:
+  xpath: //bgp-peer
+  tests:
+    - is-gt: bgp-rib/accepted-prefix-count, 2
