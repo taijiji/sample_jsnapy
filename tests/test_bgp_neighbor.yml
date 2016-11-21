@@ -1,0 +1,2 @@
+test_bgp_neighbor:
+  - command: show bgp neighbor

@@ -1,0 +1,12 @@
+test_interface_up_xe-0-2-0:
+  - command: show interfaces terse xe-0/2/0
+  - item:
+          xpath: //physical-interface[normalize-space(name) = "xe-0/2/0"]
+    tests:
+      - is-equal:admin-status,up
+        info:"Test:OK”
+        err:"Test:NG"
+      - is-equal:oper-status,up
+        info:"Test:OK”
+        err:"Test:NG"
+

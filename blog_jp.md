@@ -17,6 +17,9 @@ JSNAPyでできること
 
 
 JSNAPy
+公式ドキュメント
+https://github.com/juniper/jsnapy/wiki
+
 https://github.com/juniper/jsnapy
 Installation:
 You can install and run JSNAPy by following installation steps mentioned in wiki:
@@ -26,6 +29,219 @@ Source Code: https://github.com/juniper/jsnapy
 Wiki: https://github.com/juniper/jsnapy/wiki
 Examples: https://github.com/Juniper/jsnapy/tree/master/samples
 
+--snap : snapショットを取得
+--check : ２つのsnapを比較して評価
+--snapshot : 既存snapと、現在のコンフィグとを比較して、評価
+評価するための関数
+https://github.com/Juniper/jsnapy/wiki
+
+PyEz 
+
+JUNOS 11.4よりサポート
+公式APIドキュメント
+http://junos-pyez.readthedocs.io/en/2.0.1/
+
+- いい記事
+Juniper JUNOS PyEz (python library)を試すメモ 1 ~PyEz概要~
+http://qiita.com/hiromiarts/items/aade90a161acd63bc8ed
+
+Juniper JUNOS PyEz (python library)を試すメモ 2 ~PyEzによる情報取得~
+http://qiita.com/hiromiarts/items/f44ec5eab6a7508f050a#_reference-52d108e43bb587187d80
+
+Juniper JUNOS PyEz (python library)を試すメモ ３ ~PyEzによる設定変更~
+http://qiita.com/hiromiarts/items/ccaaeed4709d9961cdcc#_reference-75abb91c856511fe5b64
+
+
+
+
+Configuration Process
+lock() - コンフィグレーションのロック
+load() - 設定の読込 (rollback()やrescue()による設定戻しも可)
+commit() - 設定の反映
+unlock() - コンフィグレーションのアンロック
+
+
+load merge : 既に入力されているcandidateコンフィグに追加/マージした上で、loadする (commit未実施)
+load overload : 既に入力されているcandidateコンフィグを消去した上で、loadする (commit未実施)
+load replace : 専用の「replace:」タグを付けた部分のみを上書きして、loadする (commit未実施)
+load (default) : load replace
+http://www.infraeye.com/study/junos4.html
+公式ページ: Loading a Configuration from a File
+https://www.juniper.net/documentation/en_US/junos12.3/topics/task/configuration/junos-software-configuration-file-loading.html
+load option overlide/merge/replaceサンプル
+https://www.juniper.net/documentation/en_US/junos12.3/topics/example/junos-software-config-file-loading.html#id-10728250
+
+
+
+# 検証構成
+firefly1
+- ge-0/0/0: DHCP
+- ge-0/0/1: 192.168.33.16/24
+firefly2
+- ge-0/0/0: DHCP
+- ge-0/0/1: 192.168.33.17/24
+MacBook Air(host)
+- vboxnet0: 192.168.33.1
+
+メモ
+firefly２台立ち上げると、Memoryが合計7.5Gも使ってしまい、
+8.0G memory Macbook Aireではギリギリ。最初はPC固まった。
+不要はプロセスは閉じて、2Gx2=4Gほどメモリ空きを確保してから実施しましょう
+
+試行錯誤メモ
+- VirtualBoxのネットワーク設定がNATだとうまくいかない
+  昨日HostOnlyAdaptにしたら、Firefly -> MacへのpingだけOKになった。
+- private_network, inte_netでも失敗。通信もなにもできない
+- trust networkに追加したが、通信もなにもできない
+- セグメントを変えてみる private : 192.168.34.xにしてみる
+    - あれ、そもそもホストOS側に192.168.34.xのIPが振られてない。そういうものか
+    - ダメ。状況変わらず
+- public_network にしてみた。
+    - ダメ。
+- そもそもゲスト-ホスト間で通信できないのが、Vagrantとしておかしい。
+    - firefly設定ミスによるものか
+    - junos-vagrantがそもそもおかしい
+
+
+参考にしたVagrant設定ブログ
+http://labs.septeni.co.jp/entry/20140707/1404670069
+
+
+fireflyではVagrantFileで作ったinterfaceはデフォルトuntrustになっていて、通信できないようにしされている
+とりあえずtrustにしてあげることで、全通信を許可させる
+set security zones security-zone trust interfaces ge-0/0/1
+set security zones security-zone trust interfaces ge-0/0/0
+
+set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic system-services ssh
+set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic system-services ping
+# これいれて、やっと通信できた。。。
+
+#初期設定
+set system root-authentication plain-text-password
+set system time-zone Asia/Tokyo
+set system login user user1 class super-user
+set system login user user1 authentication plain-text-password
+
+# Mac側での準備
+pip install junos-eznc
+```:うまくいかない
+*********************************************************************************
+
+Could not find function xmlCheckVersion in library libxml2. Is libxml2 installed?
+
+Perhaps try: xcode-select --install
+
+*********************************************************************************
+
+error: command 'cc' failed with exit status 1
+
+----------------------------------------
+Cleaning up...
+Command /usr/bin/python -c "import setuptools, tokenize;__file__='/private/var/folders/1z/116vjww53yz3zf0nvbsp6dvm0000gn/T/pip_build_taiji/lxml/setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\r\n', '\n'), __file__, 'exec'))" install --record /var/folders/1z/116vjww53yz3zf0nvbsp6dvm0000gn/T/pip-9prVRB-record/install-record.txt --single-version-externally-managed --compile failed with error code 1 in /private/var/folders/1z/116vjww53yz3zf0nvbsp6dvm0000gn/T/pip_build_taiji/lxml
+Storing debug log for failure in /Users/taiji/Library/Logs/pip.log
+```
+
+これでうまくいった。
+xcode-select --install                                                
+
+# 問題: sshパスワード認証でログインしようとすると、mac側に公開鍵を聞かれる。ツールでアクセスできない。
+mac側の秘密鍵をキーチェインに登録しておく(Mac限定)
+これではだめでした。
+ssh-add -K ~/.ssh/id_rsa
+
+ここに足してみることでいけた
+
+vi /Users/taiji/.ssh/config
+Host 192.168.34.16
+  HostName 192.168.34.16
+  IdentityFile      /Users/taiji/.vagrant.d/insecure_private_key
+  User user1
+  PasswordAuthentication no
+
+ただしまだツールではうまくアクセスできない
+
+Juniperドキュメント (ただしうまくアクセスできず)
+http://forums.juniper.net/t5/Automation/Scripting-How-To-Junos-NETCONF-and-SSH-Part-2/ta-p/279102
+
+
+```馬淵ツールの例
+import os
+import paramiko
+from scp import SCPClient
+# ssh config file lookup
+def scp_get(FILENAME):
+    try:
+        config_file = os.path.join(os.getenv('HOME'), '.ssh/config')
+        ssh_config = paramiko.SSHConfig()
+        ssh_config.parse(open(config_file, 'r'))
+        lkup = ssh_config.lookup('jaboten')
+
+        ssh = paramiko.SSHClient()
+        ssh.load_system_host_keys()
+        ssh.connect(
+            lkup['hostname'],
+            username=lkup['user'],
+            password='****',
+            key_filename=lkup['identityfile'],
+            sock=paramiko.ProxyCommand(lkup['proxycommand'])
+        )
+        scp = SCPClient(ssh.get_transport())
+        scp.get('/home/t-mabuchi/trafficwatcher/traffic_data/%s'%FILENAME)
+
+        scp.close()
+        ssh.close()
+        return True
+    except:
+        raise
+```
+
+あれ、configcollector(Exscriptを利用)はすんなり取れる。。。
+
+ルータに設定足してみる。だめ。。
+```
+set system services netconf ssh port 22
+```
+
+#解決した！！！！
+pdbでデバッグで潜り続けていると、ncclientのポートでTCP830を使った通信をしていることが判明した
+```
+> /Library/Python/2.7/site-packages/ncclient/transport/ssh.py(363)connect()
+-> sock.connect(sa)
+
+(Pdb) p sa
+('192.168.34.16', 830)
+```
+
+RFC読むと、TCP830が正式なNETCONF over SSHの割当ポートらしい。
+https://trac.tools.ietf.org/html/rfc4742
+In order to allow NETCONF traffic to be easily identified and
+   filtered by firewalls and other network devices, NETCONF servers MUST
+   default to providing access to the "netconf" SSH subsystem only when
+   the SSH session is established using the IANA-assigned TCP port
+   <830>.  Servers SHOULD be configurable to allow access to the netconf
+   SSH subsystem over other ports.
+
+PyEZの挙動としては、デフォルトTCP830ポートを使ってるっぽい
+('192.168.34.16', 830)
+
+怪しいサイトには、以下のように書いている。
+「デフォルトのNETCONF TCPポート830，または標準的なSSH TCPポート22のどちらかで，NETCONFを有効化する」
+http://itdoc.hitachi.co.jp/manuals/3021/3021324220/NNMS0039.HTM
+
+小島さんブログより
+http://codeout.hatenablog.com/entry/2014/10/30/224405
+Firefly は, SSH ポート(22/tcp) もしくはNETCONF ポート(830/tcp) で登録できる.
+
+コマンド
+vagrant ssh firefly1
+vagrant ssh firefly2
+ping 192.168.33.16
+ping 192.168.33.17
+ping 192.168.33.15
+ping 192.168.33.1
+
+ping 192.168.34.16
+ping 192.168.34.17
 
 # インストール
 環境

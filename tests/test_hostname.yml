@@ -1,0 +1,8 @@
+test_hostname:
+  - command: show version
+  - item:
+      xpath: '/software-information'
+      tests:
+        - is-equal: host-name, router1_changed_by_PyEZ
+          info: "Test : OK" 
+          err: "Test : NG !! host-name is <{{pre['host-name']}}>"

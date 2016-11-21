@@ -1,0 +1,13 @@
+test_interface_xe-0/0/0_up:
+  - command: show interfaces terse xe-0/0/0
+  - item:
+      id: './name'
+      xpath: '//physical-interface'
+      tests:
+        - is-equal: admin-status, up
+          info: "Test Succeeded !! admin-status is equal to post: <{{post['admin-status']}}>  pre: <{{pre['admin-status']}}> with oper-status pre:<{{pre['oper-status']}}> post:<{{post['oper-status']}}>"
+          err: "Test Failed !! admin-status is not equal to down, it is post: <{{post['admin-status']}}>  pre:<{{pre['admin-status']}}> with oper-status <{{pre['oper-status']}}>"
+
+        - is-equal: oper-status, up
+          info : "test: OK"
+          err: "Test Failed !! oper-status is not equal to down, it is post: <{{post['oper-status']}}>  pre:<{{pre['oper-status']}}> with oper-status <{{pre['oper-status']}}>"

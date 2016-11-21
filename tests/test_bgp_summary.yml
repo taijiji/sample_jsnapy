@@ -1,0 +1,9 @@
+test_bgp-summary_neighbor_up:
+- command: show bgp summary
+- iterate:
+    xpath: '/bgp-information/bgp-peer/bgp-rib'
+    id: name, ../peer-address 
+    tests:
+    - not_equal: peer-address, Active
+      info: 'Test : NG'
+      err: 'Test : OK'
