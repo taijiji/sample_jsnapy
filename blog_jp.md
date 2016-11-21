@@ -288,8 +288,8 @@ jsnapy --snap snap02 -f sample/config_check.yml
 合計 52
 drwxrwxrwx 2 root       root         121  9月 27 08:51 .
 drwxrwxrwx 5 root       root          87  9月 26 17:34 ..
--rw-rw-r-- 1 t-tsuchiya t-tsuchiya 20984  9月 27 08:50 202.247.123.108_snap01_show_bgp_neighbor.xml
--rw-rw-r-- 1 t-tsuchiya t-tsuchiya 20984  9月 27 08:51 202.247.123.108_snap02_show_bgp_neighbor.xml
+-rw-rw-r-- 1 t-tsuchiya t-tsuchiya 20984  9月 27 08:50 192.168.34.16_snap01_show_bgp_neighbor.xml
+-rw-rw-r-- 1 t-tsuchiya t-tsuchiya 20984  9月 27 08:51 192.168.34.16_snap02_show_bgp_neighbor.xml
 -rwxrwxrwx 1 root       root         146  9月 26 17:34 README
 ```
 
@@ -562,10 +562,10 @@ Overall Tests failed!!!
 jsnapy --diff snap01 snap02 -f sample/config_check.yml
 
 
-************************** Device: 202.247.123.108 **************************
+************************** Device: 192.168.4.16  **************************
 Tests Included: test_bgp_neighbor
 ************************* Command: show bgp neighbor *************************
-/etc/jsnapy/snapshots/202.247.123.108_snap01_show_bgp_neighbor.xml /etc/jsnapy/snapshots/202.247.123.108_snap02_show_bgp_neighbor.xml
+/etc/jsnapy/snapshots/192.168.4.16_snap01_show_bgp_neighbor.xml /etc/jsnapy/snapshots/192.168.4.16_snap02_show_bgp_neighbor.xml
 <received-prefix-count>0</received-prefix-count>  <received-prefix-count>0</received-prefix-count>
 <accepted-prefix-count>0</accepted-prefix-count>  <accepted-prefix-count>0</accepted-prefix-count>
 <suppressed-prefix-count>0</suppressed-prefix-co  <suppressed-prefix-count>0</suppressed-prefix-co
@@ -644,7 +644,7 @@ unt>                                              unt>
 
 snapshot出力ファイルの設定を変更したい
 - /etc/jsnapy/snapshots/ の出力先ディレクトリを変更したい(作業順や対象がごちゃごちゃになる)
-- ファイル名に日付,日時を入れたい (202.247.123.108_snap02_show_bgp_neighbor.xmlだといつの結果かわからないよね。)
+- ファイル名に日付,日時を入れたい 
 - snap名とファイル名が紐付いてないのはどう定義するのがベストか考える必要がある
 
 時間差でupしてくるようなものについてはどうチェックするか？
