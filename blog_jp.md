@@ -76,12 +76,15 @@ https://www.juniper.net/documentation/en_US/junos12.3/topics/example/junos-softw
 # 検証構成
 firefly1
 - ge-0/0/0: DHCP
-- ge-0/0/1: 192.168.33.16/24
+- ge-0/0/1: 192.168.34.16/24
+- ge-0/0/2: 192.168.35.16/30
 firefly2
 - ge-0/0/0: DHCP
-- ge-0/0/1: 192.168.33.17/24
+- ge-0/0/1: 192.168.34.17/24
+- ge-0/0/2: 192.168.35.17/30
 MacBook Air(host)
-- vboxnet0: 192.168.33.1
+- vboxnet4: 192.168.34.1
+
 
 メモ
 firefly２台立ち上げると、Memoryが合計7.5Gも使ってしまい、
@@ -110,17 +113,39 @@ http://labs.septeni.co.jp/entry/20140707/1404670069
 fireflyではVagrantFileで作ったinterfaceはデフォルトuntrustになっていて、通信できないようにしされている
 とりあえずtrustにしてあげることで、全通信を許可させる
 set security zones security-zone trust interfaces ge-0/0/1
-set security zones security-zone trust interfaces ge-0/0/0
-
+set security zones security-zone trust interfaces ge-0/0/2
 set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic system-services ssh
 set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic system-services ping
+set security zones security-zone trust interfaces ge-0/0/2.0 host-inbound-traffic system-services bgp
+set security zones security-zone trust interfaces ge-0/0/2.0 host-inbound-traffic system-services ping
 # これいれて、やっと通信できた。。。
 
 #初期設定
 set system root-authentication plain-text-password
-set system time-zone Asia/Tokyo
 set system login user user1 class super-user
 set system login user user1 authentication plain-text-password
+set security zones security-zone trust interfaces ge-0/0/1
+set security zones security-zone trust interfaces ge-0/0/2
+set security zones security-zone trust interfaces ge-0/0/1.0 host-inbound-traffic system-services all
+set security zones security-zone trust interfaces ge-0/0/2.0 host-inbound-traffic system-services all
+set system time-zone Asia/Tokyo
+set system services netconf ssh port 22
+
+
+
+
+コマンド
+vagrant ssh firefly1
+vagrant ssh firefly2
+ping 192.168.34.16
+ping 192.168.34.17
+ping 192.168.33.15
+ping 192.168.33.1
+
+ping 192.168.34.16
+ping 192.168.34.17
+
+
 
 # Mac側での準備
 pip install junos-eznc
@@ -232,16 +257,49 @@ http://itdoc.hitachi.co.jp/manuals/3021/3021324220/NNMS0039.HTM
 http://codeout.hatenablog.com/entry/2014/10/30/224405
 Firefly は, SSH ポート(22/tcp) もしくはNETCONF ポート(830/tcp) で登録できる.
 
-コマンド
-vagrant ssh firefly1
-vagrant ssh firefly2
-ping 192.168.33.16
-ping 192.168.33.17
-ping 192.168.33.15
-ping 192.168.33.1
 
-ping 192.168.34.16
-ping 192.168.34.17
+#問題 MAC->fireflyへSSHできなくなった。
+```
+% ssh -vvv user1@192.168.34.16
+OpenSSH_6.9p1, LibreSSL 2.1.8
+debug1: Reading configuration data /Users/taiji/.ssh/config
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 21: Applying options for *
+debug2: ssh_connect: needpriv 0
+debug1: Connecting to 192.168.34.16 [192.168.34.16] port 22.
+debug1: Connection established.
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_rsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_rsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_dsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_dsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_ecdsa type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_ecdsa-cert type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_ed25519 type -1
+debug1: key_load_public: No such file or directory
+debug1: identity file /Users/taiji/.ssh/id_ed25519-cert type -1
+debug1: Enabling compatibility mode for protocol 2.0
+debug1: Local version string SSH-2.0-OpenSSH_6.9
+ssh_exchange_identification: read: Connection reset by peer
+```
+
+# JSNAPyをプログラム上で実行するときにログを出さないようにする。
+```
+vi /etc/jsnapy/logging.yml
+　61 root:
+ 62     level: DEBUG
+ 63     #handlers: [console, debug_file_handler]
+ 64     handlers: [debug_file_handler]
+ ```
+
+# JSNAPyプログラムを二回目呼び出したときに、CPU利用率が異常
+わらからん。。。
 
 # インストール
 環境
