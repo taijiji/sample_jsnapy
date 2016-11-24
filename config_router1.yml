@@ -3,6 +3,7 @@ hosts:
   - device: 192.168.34.16 
     username : user1
     passwd: password1
+    port: 22
 tests:
   - ./tests/test_hostname.yml
         
