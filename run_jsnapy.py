@@ -4,9 +4,8 @@
 #from pprint import pprint
 from jnpr.junos import Device
 from jnpr.junos.utils.config import Config
-
 from jnpr.jsnapy import SnapAdmin
-from jnpr.junos import Device
+
 
 jsnapy = SnapAdmin()
 
@@ -17,6 +16,7 @@ hosts:
 - device: 192.168.34.16
   username: user1
   passwd: password1
+  port: 22
 tests:
 - ./tests/test_hostname.yml
 '''
@@ -30,29 +30,17 @@ tests:
 
 print 'test: 1'
 snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
-snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
-
-for snapcheck in snapcheck_list:
-    print snapcheck.result
 
 print 'test: 2'
 snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
-for snapcheck in snapcheck_list:
-    print snapcheck.result
 
 print 'test: 3'
 snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
-for snapcheck in snapcheck_list:
-    print snapcheck.result
 
 print 'test: 4'
 snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
-for snapcheck in snapcheck_list:
-    print snapcheck.result
 
 print 'test: 5'
 snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
-for snapcheck in snapcheck_list:
-    print snapcheck.result
 
 
