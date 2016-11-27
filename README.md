@@ -75,27 +75,56 @@ Overall Tests passed!!!
 ```
 
 
-## Run JSNAPy by Python script
-run JSNAPy via python script(but include bug)
+## Sample 2 : Run JSNAPy by Python script
+Before run this script, you need edit '/etc/jsnapy/logging.yml'.
+
+```yaml:/etc/jsnapy/logging.yml
+ 61 root:
+ 62     level: DEBUG
+ 63     #handlers: [console, debug_file_handler]
+ 64     handlers: [debug_file_handler]
+```
+
+Run JSNAPy via python script
 
 ```
-python run_jsnapy.py
+python run_jsnapy_test_hostname_model.py
 ```
 
 output
 
 ```
-test: 1
-Connecting to device 192.168.34.16 ................
-Taking snapshot of COMMAND: show version
-*************************** Device: 192.168.34.16 ***************************
-Tests Included: test_hostname
-*************************** Command: show version ***************************
-PASS | All "host-name" is equal to "firefly1" [ 1 matched ]
-------------------------------- Final Result!! -------------------------------
-Total No of tests passed: 1
-Total No of tests failed: 0
-Overall Tests passed!!!
-
-(snip)
+% python run_jsnapy_test_hostname_model.py
+                                                                                                                                               (git)-[master]
+##### JSNAPy Test : Start #####
+Devece :  192.168.34.16
+Final result :  Passed
+Total passed :  2
+Total failed :  0
+snapcheck test_details :
+------------------------------
+{'show version': [{'count': {'fail': 0, 'pass': 1},
+                   'expected_node_value': 'firefly1',
+                   'failed': [],
+                   'node_name': 'host-name',
+                   'passed': [{'actual_node_value': 'firefly1',
+                               'id': {},
+                               'post': {'host-name': 'firefly1'},
+                               'pre': {'host-name': 'firefly1'}}],
+                   'result': True,
+                   'testoperation': 'is-equal',
+                   'xpath': '/software-information'},
+                  {'count': {'fail': 0, 'pass': 1},
+                   'expected_node_value': 'firefly-perimeter',
+                   'failed': [],
+                   'node_name': 'product-model',
+                   'passed': [{'actual_node_value': 'firefly-perimeter',
+                               'id': {},
+                               'post': {'product-model': 'firefly-perimeter'},
+                               'pre': {'product-model': 'firefly-perimeter'}}],
+                   'result': True,
+                   'testoperation': 'is-equal',
+                   'xpath': '/software-information'}]}
+------------------------------
+##### JSNAPy Test : End #####
 ```
