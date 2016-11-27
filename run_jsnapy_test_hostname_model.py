@@ -11,9 +11,6 @@ dev1 = Device(
         password = 'password1',
         port = 22)
 
-jsnapy = SnapAdmin()
-
-
 jsnapy_config =\
 '''
 tests:
@@ -21,9 +18,11 @@ tests:
 - ./tests/test_model.yml
 '''
 
-
-print 'test: 1'
-snapcheck_list = jsnapy.snapcheck(data=jsnapy_config, file_name="test")
+jsnapy = SnapAdmin()
+snapcheck_list = jsnapy.snapcheck(
+                  data = jsnapy_config,
+                  dev = dev1,
+                  file_name = "snap01")
 
 
 
