@@ -43,7 +43,6 @@ test_hostname:
           info: "Test : OK, Model is <{{pre['product-model']}}>"
           err:  "Test : NG, Model is <{{pre['product-model']}}>"
 ```
-```
 
 output
 ( -v is option to display debug level messages)

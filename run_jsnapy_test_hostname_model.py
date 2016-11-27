@@ -7,9 +7,6 @@ from jnpr.jsnapy import SnapAdmin
 
 from pprint import pprint, pformat
 
-#Set color font
-colorama.init(autoreset=True)
-
 jsnapy_config =\
 '''
 tests:
