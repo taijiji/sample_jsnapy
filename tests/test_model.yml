@@ -1,0 +1,8 @@
+test_model:
+  - command: show version
+  - item:
+      xpath: '/software-information'
+      tests:
+        - is-equal: product-model, firefly-perimeter
+          info: "Test : OK, Model is <{{pre['product-model']}}>"
+          err:  "Test : NG, Model is <{{pre['product-model']}}>"

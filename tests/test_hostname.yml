@@ -4,7 +4,5 @@ test_hostname:
       xpath: '/software-information'
       tests:
         - is-equal: host-name, firefly1
-          info: "Test : OK" 
-          err: "Test : NG !! host-name is <{{pre['host-name']}}>"
-
-
+          info: "Test : OK, host-name is <{{pre['host-name']}}>"
+          err:  "Test : NG, host-name is <{{pre['host-name']}}>"
