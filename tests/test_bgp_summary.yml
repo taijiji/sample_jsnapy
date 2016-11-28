@@ -5,5 +5,3 @@ test_bgp-summary_neighbor_up:
     id: name, ../peer-address 
     tests:
     - not_equal: peer-address, Active
-      info: 'Test : NG'
-      err: 'Test : OK'
