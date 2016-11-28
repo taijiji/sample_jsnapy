@@ -1,0 +1,8 @@
+test_interface_ge-0/0/3_up:
+  - command: show interfaces terse ge-0/0/3
+  - item:
+      id: './name'
+      xpath: './physical-interface'
+      tests:
+        - is-equal: admin-status, up
+        - is-equal: oper_status, up

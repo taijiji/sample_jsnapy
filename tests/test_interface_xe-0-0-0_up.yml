@@ -1,9 +1,0 @@
-test_interface_xe-0/0/0_up:
-  - command: show interfaces terse xe-0/0/0
-  - item:
-      id: './name'
-      xpath: '//physical-interface'
-      tests:
-        - is-equal: admin-status, up
-          info: "Test : OK, admin-status is equal to post: <{{post['admin-status']}}>  pre: <{{pre['admin-status']}}>"
-          err:  "Test : NG, admin-status is not equal to down, it is post: <{{post['admin-status']}}>  pre:<{{pre['admin-status']}}>"
