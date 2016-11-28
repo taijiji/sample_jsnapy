@@ -17,8 +17,7 @@ tests:
 dev1 = Device(
         host = '192.168.34.16',
         user = 'user1',
-        password = 'password1',
-        port = 22)
+        password = 'password1')
 dev1.open()
 
 jsnapy = SnapAdmin()
