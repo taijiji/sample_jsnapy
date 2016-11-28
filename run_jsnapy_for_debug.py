@@ -1,12 +1,11 @@
+# This is debug script for JSNAPy 1.0.0 issue(https://github.com/Juniper/jsnapy/issues/204)
+# If you upgrade after JSNAPY 1.0.1, this issue will be solved.
+
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from jnpr.junos import Device
 from jnpr.junos.utils.config import Config
 from jnpr.jsnapy import SnapAdmin
-
-from pprint import pprint, pformat
-
 
 jsnapy_config =\
 '''
