@@ -1,0 +1,6 @@
+test_bgp_recieved_route_{{ neighbor_address_ipv4 }}:
+  - command: show route advertising-protocol bgp {{ neighbor_address_ipv4 }}
+  - iterate:
+    xpath: '/route-information'
+    tests:
+      - exists: rt[rt-destination='3.3.3.3/32']
