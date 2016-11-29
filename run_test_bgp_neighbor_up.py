@@ -46,7 +46,7 @@ with open(test_filename, 'w') as f:
 jsnapy_config =\
 '''
 tests:
-- %s
+  - %s
 ''' % (test_filename)
 
 dev1 = Device(
