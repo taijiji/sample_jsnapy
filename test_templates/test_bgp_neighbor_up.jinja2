@@ -1,7 +1,7 @@
 test_bgp_neighbor_up_{{ neighbor_address_ipv4 }}:
 - command: show bgp neighbor {{ neighbor_address_ipv4 }}
 - iterate:
-    xpath: 'bgp-peer'
+    xpath: bgp-peer
     tests:
     - is_equal: peer-state, Established
     - is_equal: local-as, {{ local_asnum }}

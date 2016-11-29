@@ -1,7 +1,7 @@
 test_hostname:
   - command: show version
   - item:
-      xpath: '/software-information'
+      xpath: /software-information
       tests:
         - is-equal: host-name, firefly1
           info: "Test : OK, host-name is <{{pre['host-name']}}>"

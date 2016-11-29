@@ -1,7 +1,7 @@
 test_interfaces_all_up:
   - command: show interfaces terse 
   - iterate:
-      xpath: './physical-interface'
+      xpath: physical-interface
       tests:
         - is-equal: admin-status, up
         - is-equal: oper-status, up
