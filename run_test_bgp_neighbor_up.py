@@ -17,7 +17,9 @@ from jnpr.jsnapy import SnapAdmin
 template_dir_name  = './test_templates/'
 template_base_name = 'test_bgp_neighbor_up.jinja2'
 param_interface = {
-    "neghbor_address_ipv4"    : "192.168.35.2",
+    "neighbor_address_ipv4"  : "192.168.35.2",
+    "neighbor_asnum"         : "65002",
+    "local_asnum"           : "65001",
 }
 
 print 'Load test_template : '
@@ -26,7 +28,7 @@ with open(template_filename, 'r') as conf:
     template_txt = conf.read()
     test_yml = Environment().from_string(template_txt).render(param_interface)
     test_base_name = template_base_name.rstrip('.jinja2') +\
-                     '_' + param_interface["neghbor_address_ipv4"] + '.yml'
+                     '_' + param_interface["neighbor_address_ipv4"] + '.yml'
 
 test_base_name = test_base_name.rstrip('.yml').replace('.','-') + '.yml'
 
