@@ -1,8 +1,8 @@
 test_bgp_advertised_route_192.168.35.2:
   - command: show route advertising-protocol bgp 192.168.35.2
   - iterate:
-    xpath: route-table
-    tests:
-      - exists: rt[rt-destination='10.10.10.0/24']
-        info: "Test : OK"
-        err:  "Test : NG"
+      xpath: route-table
+      tests:
+        - exists: rt[rt-destination='10.10.10.0/24']
+          info: "Test : OK"
+          err:  "Test : NG"

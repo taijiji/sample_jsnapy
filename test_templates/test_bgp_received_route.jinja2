@@ -1,8 +1,8 @@
 test_bgp_recieved_route_{{ neighbor_address_ipv4 }}:
   - command: show route protocol bgp receive-protocol bgp {{ neighbor_address_ipv4 }}
   - iterate:
-    xpath: route-table
-    tests:
-      - exists: rt[rt-destination='{{ received_route_address_ipv4 }}/{{ received_route_subnet_ipv4 }}']
-        info: "Test : OK"
-        err:  "Test : NG"
+      xpath: route-table
+      tests:
+        - exists: rt[rt-destination='{{ received_route_address_ipv4 }}/{{ received_route_subnet_ipv4 }}']
+          info: "Test : OK"
+          err:  "Test : NG"

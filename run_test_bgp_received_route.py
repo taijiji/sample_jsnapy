@@ -18,7 +18,7 @@ template_dir_name  = './test_templates/'
 template_base_name = 'test_bgp_received_route.jinja2'
 param_received_route = {
     "neighbor_address_ipv4"         : "192.168.35.2",
-    "received_route_address_ipv4"   : "10.10.20.0",
+    "received_route_address_ipv4"   : "10.10.30.0",
     "received_route_subnet_ipv4"    : "24",
 }
 

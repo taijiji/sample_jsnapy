@@ -1,8 +1,8 @@
 test_bgp_neighbor_up_192.168.35.2:
-- command: show bgp neighbor 192.168.35.2
-- iterate:
+  - command: show bgp neighbor 192.168.35.2
+  - iterate:
     xpath: bgp-peer
     tests:
-    - is_equal: peer-state, Established
-    - is_equal: local-as, 65001
-    - is_equal: peer-as, 65002
+      - is_equal: peer-state, Established
+      - is_equal: local-as, 65001
+      - is_equal: peer-as, 65002

@@ -1,8 +1,8 @@
 test_bgp_advertised_route_{{ neighbor_address_ipv4 }}:
   - command: show route advertising-protocol bgp {{ neighbor_address_ipv4 }}
   - iterate:
-    xpath: route-table
-    tests:
-      - exists: rt[rt-destination='{{ advertised_route_address_ipv4 }}/{{ advertised_route_subnet_ipv4 }}']
-        info: "Test : OK"
-        err:  "Test : NG"
+      xpath: route-table
+      tests:
+        - exists: rt[rt-destination='{{ advertised_route_address_ipv4 }}/{{ advertised_route_subnet_ipv4 }}']
+          info: "Test : OK"
+          err:  "Test : NG"

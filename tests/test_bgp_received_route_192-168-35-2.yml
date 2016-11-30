@@ -1,8 +1,8 @@
 test_bgp_recieved_route_192.168.35.2:
   - command: show route protocol bgp receive-protocol bgp 192.168.35.2
-  - item:
-    xpath: route-table
-    tests:
-      - exists: rt[rt-destination='10.10.20.0/24']
-        info: "Test : OK"
-        err:  "Test : NG"
+  - iterate:
+      xpath: route-table
+      tests:
+        - exists: rt[rt-destination='10.10.30.0/24']
+          info: "Test : OK"
+          err:  "Test : NG"
